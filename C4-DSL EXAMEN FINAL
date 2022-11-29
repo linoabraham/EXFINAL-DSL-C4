@@ -1,0 +1,73 @@
+workspace {
+model {
+ciudadano = person "Ciudadano"
+operador_regional = person "operador regional"
+operador_nacional = person "operador nacional"
+sistemaSASpe = softwareSystem "sistemaSASpe" "Sistema que permite la gestión y notificación de brotes de pandemia" "SistemaSismo" {
+webApp = container "Aplicación web" "Aplicación web " "Angular" "WebApp"
+mobileApp = container "Aplicación móvil"
+landingPage = container "Landing page"
+database = container "Base de datos"
+AplicacionEdge = container "Aplicacion de borde Edge"
+AplicacionConsoalidacion =  container "Aplicacion de consolidacion" "Triangular informacion de las estaciones de monitoreo"
+LOT = container "Sistema LoT"
+procesamiento = container "Procesamiento IGP"
+
+}
+INDECI = softwareSystem " INDECI" "Evalua el riesgo"
+IGP = softwareSystem "Instituto Geofisico Peru"
+centralDatos = softwareSystem "Sistema central de datos"
+estacionMonitoreo = softwareSystem "Sistema de estacion de monitoreo"
+centralProcesamiento = softwareSystem "Sistema central de procesamiento "
+sistemaNotificacion = softwareSystem "SISMATE" "Envia Alerta por el Celular"
+ciudadano -> sistemaSASpe "Usa"
+sistemaSASpe -> sistemaNotificacion "envia notifcacion"
+sistemaNotificacion -> ciudadano "Notifica"
+sistemaNotificacion -> operador_regional "Notifica"
+sistemaNotificacion -> operador_nacional "Notifica"
+sistemaSASpe -> centralProcesamiento "Notifica como centra"
+sistemaSASpe -> centralDatos "usa"
+sistemaSASpe -> estacionMonitoreo "verifica"
+sistemaSASpe -> operador_regional
+sistemaSASpe -> operador_nacional
+
+
+operador_nacional -> AplicacionConsoalidacion
+ciudadano -> landingPage "Ingresa"
+landingPage -> webApp "Utiliza"
+webApp -> mobileApp "direcciona"
+AplicacionEdge -> AplicacionConsoalidacion "Usa" 
+operador_regional -> AplicacionEdge 
+LOT -> AplicacionEdge
+estacionMonitoreo -> AplicacionEdge
+AplicacionConsoalidacion -> database
+mobileApp -> database
+AplicacionConsoalidacion -> procesamiento
+procesamiento -> SistemaNotificacion
+}
+
+views {
+systemContext sistemaSASpe {
+include *
+autolayout lr
+}
+container sistemaSASpe {
+    include *
+    autoLayout lr
+}
+styles {
+element "SistemaSismo" {
+shape RoundedBox
+background #802D1D
+color #ffffff
+}
+element "Container" {
+shape RoundedBox
+background #e28743
+color #ffffff
+}
+}
+
+ theme default
+}
+}
